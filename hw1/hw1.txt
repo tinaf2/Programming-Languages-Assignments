@@ -1,0 +1,52 @@
+1. subset
+The subset function was implemented as a recursive function that checks for the presence of each element of one list (a) in another list
+(b) using `List.mem`. While a higher-order function like `List.for_all` could have been considered, it would not have significantly 
+improved the overall intuitiveness or performance of the function. The primary weakness of this approach is its potential performance 
+issues for large lists, since `List.mem` operates with linear time complexity, which could be inefficient for large data sets.
+
+2. equal_sets
+For the equal sets function, the initial approach of directly comparing sets was replaced with a more efficient method using the subset 
+function. This change not only made the process also aligned the function more closely with the mathematical definition of set equality, 
+by which two lists are considered equal if they are subsets of one another. The major limitation of this function is its reliance on the 
+efficiency of the subset function, which means it would inherit the same performance issues as the subset function.
+
+3. set_union
+The set union function was crafted using a recursive approach, which concatenates elements of the first list (a) with the second list (b). 
+Alternative methods like removing duplicates or using `List.append` were considered but ultimately not included, as they were not 
+necessary for the basic functionality of the function. The function's main weakness is its inability to handle duplicates, which may be 
+problematic in some situations.
+
+4. set_all_union
+In implementing the set all union function, `List.fold_left` was utilized in conjunction with the previously defined `set_union` function. 
+This method proved to be both concise and effective for performing unions over a list of sets. While the `@` operator could have been 
+used for appending lists, it was not considered the optimal choice here. The `@` operator simply concatenates lists without any additional
+processing, while the `set_union` function provides a framework that can be easily adjusted for more complex set operations.  However, 
+it inherits the issue of not addressing duplicates from the `set_union` function, which could also be a concern in certain applications.
+
+
+5. computed_fixed_point
+6. computed_periodic_point
+The computed fixed point and periodic point functions were implemented using recursive methods that incorporate the principles of these 
+mathematical concepts. No significant alternatives were considered, since it made most sense to implement them recursively due to their 
+repetitive nature, and they were direct translations of the mathematical concepts which left little room for flexibility. A potential 
+weakness in these implementations is the risk of stack overflow, especially in scenarios involving extensive recursive calls.
+
+7. whileseq
+The whileseq function was developed as a simple recursive function after clarifying the initial confusion regarding its purpose. This 
+approach is straightforward and effective, provided the predicate (p) and transformation functions (s) are accurately defined. The main 
+concern with this function is ensuring the correctness and reliability of the input functions, as the overall result heavily depends on 
+their accuracy.
+
+8. filter_blind_alleys
+Initially, a more complex approach with separate helper functions was considered but was later simplified to use embedded auxiliary 
+functions within the larger function for better efficiency and readability. To effectively filter out nonproductive rules, I used an 
+iterative approach with a dictionary. This method mirrors the concept of a computed fixed point function, where the dictionary is 
+repeatedly updated until no further changes occur. This iterative process prevents infinite loops, ensuring that the function stops once 
+all rules have been adequately processed. This approach was better suited than using the computed fixed point function itself. The 
+function required detailed tracking and updating of grammar rules in a dictionary, which needed more nuanced control than what a 
+computed fixed point function typically offers. The main drawback of this function is its potential complexity and reduced efficiency 
+when dealing with large rule sets, due to multiple traversals and checks required in the implementation process.
+
+
+
+

@@ -1,0 +1,86 @@
+I decided to build make_matcher before make_parser, because in a way it 
+seemed to me that parsing a tree involved a similar process to matching and 
+accepting, but with a few extra details. I developed my make_parser function 
+by modeling it on the make_matcher function, modifying and enhancing it as 
+required, though without any direct invocation of make_matcher within 
+make_parser. In hindsight, this method was helpful as it allowed me to build 
+make_parser based on make_matcher, incorporating additional variables for more complex 
+tracking and adding the additional functionalities needed to build the tree. 
+However, this means there is duplication between make_parser and make_matcher, 
+as they share some similarities in code and function, leading to some redundancy.
+
+Such duplication could introduce issues, including challenges in maintaining 
+the code—updates made to one function might require identical changes in the 
+other. In addition to making the code unnecessarily long, this might pose problems 
+in larger-scale applications where minimizing redundancy could help efficiency. 
+However, the redundancy actually helped to clarify the logical progression of 
+both functions, which is why I didn't see an immediate need to address this 
+redundancy within the scope of this assignment.
+
+While make_matcher and make_parser share structural similarities, their 
+functionalities are different in the way they handle grammar rules to match input 
+fragments or construct parse trees. make_matcher navigates through the grammar 
+rules to match a given fragment against specified patterns, returning the 
+unmatched portion if any exists. This matching process is facilitated by 
+recursive calls that efficiently deal with both terminals and non-terminals, 
+where terminals are matched directly against the input, and non-terminals invoke 
+further exploration of the grammar's production rules.
+
+The make_parser function builds on this by not only attempting to match the 
+entire fragment but also by assembling a parse tree that provides a visual 
+representation of how the input corresponds to the grammar. This process is more 
+complex due to the addition of constructing and updating a parse 
+tree with each recursive descent, which is a key difference in implementation. 
+Specifically, make_parser uses currying to pass down and accumulate changes to 
+the parse tree, a more complicated technique that requires tracking the current 
+symbol and updating the parse tree accordingly.
+
+Another notable difference between the functions are their acceptors, which assess 
+the unmatched content returned by the matcher to determine its acceptability. 
+An acceptor either acknowledges the content by returning a specific value (Some x) 
+if it deems the content acceptable, or it returns None if not. For make_matcher, 
+acceptors are externally supplied when the function is called, allowing users to 
+define what constitutes acceptability. The matcher's functionality is therefore 
+dependent on the user-defined acceptor. Conversely, make_parser integrates 
+the acceptor internally, only deeming the parsing successful and returning a parse 
+tree when it receives an empty list, indicating complete parsing of the phrase.
+
+Both functions have a shared limitation in dealing with potential ambiguities 
+and preventing infinite loops, especially in grammars where symbols are recursively 
+defined and non-terminals reference each other in their rules. The current 
+implementation lacks explicit the ability to detect or resolve these issues, 
+which would be important to add when using more complex grammars where ambiguities 
+are more likely to exist and cause infinite loops/recursions,
+than the more simple grammars used in this assignemnt. Below is an example 
+of ambiguities that could cause this type of issue: 
+
+let production_function = function
+    | CS131 ->
+            [[N Smallberg; N C++]]
+    | Smallberg ->
+		[[N C++]]
+	| C++ ->
+		[[N Smallberg]]
+...
+
+or 
+
+let production_function = function
+    | CS131 ->
+        [[N Smallberg; N C++]]
+    | Smallberg ->
+		[[N Smallberg; C++]]
+	| C++ ->
+		[[N C++; Smallberg]]
+...
+
+In addition, the recursive approach, which excels at navigating the hierarchical 
+complexities of grammars, can cause efficiency issues. This method inherently 
+stacks each call upon the previous one, leading to a potentially deep recursion. 
+This depth becomes more problematic with larger, more complex grammars, where the 
+same rules might be processed repeatedly. Beyond the computational overhead, 
+there's also the risk of reaching the system's recursion depth limit, which could 
+prevent the parsing operation from being completed. Optimizing these aspects, 
+possibly through memoization or other strategies to reduce redundant computations, 
+could improve the efficiency.
+

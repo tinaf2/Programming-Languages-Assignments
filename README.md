@@ -1,4 +1,4 @@
-hw1 - Fixed point theory and grammar filtering program in OCaml
+hw1 - Fixed point theory and grammar optimization filer in OCaml
 
 hw2 - Recursive-descent parser for context-free grammars in OCaml
 
